@@ -45,9 +45,8 @@ function createController()
     } else {
         $object = new $controller404();
         call_user_func([$object, 'index'], urlSlice()[PARAMS]);
+        die();
     }
-
-    die();
 }
 
 /**
