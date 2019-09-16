@@ -6,39 +6,45 @@ namespace App\Tariffs;
 
 use stdClass;
 
-class Tariff extends AbstractTariff
+class Tariff
 {
     /**
-     * Tariff constructor.
-     * @param stdClass $object
+     * @var string
      */
-    protected function __construct(stdClass $object)
-    {
-        parent::__construct($object);
-    }
+    private $title;
 
     /**
-     * @param stdClass $object
-     * @return Tariff
+     * @var array
      */
-    public static function create(stdClass $object)
-    {
-        return new self($object);
-    }
+    private $variants;
 
     /**
-     * dont try clone this object
+     * @var string
      */
-    private function __clone()
-    {
-
-    }
+    private $link;
 
     /**
-     *
+     * @var int
      */
-    private function __wakeup()
-    {
+    private $speed;
 
+    /**
+     * @var int
+     */
+    private $priceAdd;
+
+    /**
+     * @var array
+     */
+    private $freeOptions;
+
+    public function __construct(stdClass $object)
+    {
+        $this->title = $object->title;
+        $this->variants = $object->tarifs;
+        $this->link = $object->link;
+        $this->speed = $object->speed;
+        $this->priceAdd = $object->price_add;
+        $this->freeOptions = $object->free_options;
     }
 }
