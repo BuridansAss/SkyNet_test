@@ -4,6 +4,8 @@
 namespace App\Json;
 
 
+use stdClass;
+
 class Parser
 {
     /**
@@ -20,7 +22,10 @@ class Parser
         $this->json = $json;
     }
 
-    public function jsonToObjects()
+    /**
+     * @return stdClass
+     */
+    public function jsonToObjects() : stdClass
     {
         return json_decode($this->json);
     }

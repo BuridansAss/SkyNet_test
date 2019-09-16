@@ -10,9 +10,13 @@ use App\Tariffs\Sort;
 
 class Main
 {
-    public function hi()
+    private $tariffs;
+
+    private function __construct()
     {
-        echo 'hi';
+        $parser = new Parser($this->getDataFromSkynet());
+
+        $this->tariffs = Creator::transformToTariffs($parser->jsonToObjects());
     }
 
     public function index()
@@ -21,12 +25,15 @@ class Main
 
         $objects = Creator::transformToTariffs($objects);
 
-        Sort::byParent($objects);
+        //Sort::byParent($objects);
 
         echo print_r($objects, 1);
     }
 
-    private function getDataFromSkynet()
+    /**
+     * @return bool|string
+     */
+    private function getDataFromSkyNet()
     {
         return file_get_contents('https://www.sknt.ru/job/frontend/data.json');
     }

@@ -17,7 +17,7 @@ function urlSlice()
     (isset($uri[2]) && $uri[2] !== '') ? $split[ACTION] = $uri[2] : $split[ACTION] = 'index';
     (isset($uri[3]) && $uri[3] !== '') ? $split[PARAMS] = $uri[3] : null;
 
-    if ($split[PARAMS]) {
+    if (isset($split[PARAMS])) {
         parse_str($split[PARAMS], $split[PARAMS]);
     }
 
@@ -75,5 +75,16 @@ function including($dir)
     }
 }
 
+function callAction()
+{
+    $slice = urlSlice();
+
+    if (isset($slice[PARAMS])) {
+        call_user_func([createController(), urlSlice()[ACTION]], urlSlice()[PARAMS]);
+    } else {
+        call_user_func([createController(), urlSlice()[ACTION]]);
+    }
+}
+
 including(SRC);
-call_user_func([createController(), urlSlice()[ACTION]], urlSlice()[PARAMS]);
+callAction();
