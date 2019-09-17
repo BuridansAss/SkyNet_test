@@ -30,11 +30,10 @@ class Creator
      * @return Tariff
      * @throws Exception
      */
-    public static function getTariffByName(stdClass $jsonObject, $id)
+    public static function getTariffById(stdClass $jsonObject, $id) : Tariff
     {
         try {
             $tariffName = Tariff::getNameById($id);
-
 
             foreach ($jsonObject->tarifs as $tariff) {
 

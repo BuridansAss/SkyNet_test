@@ -44,6 +44,11 @@ class TariffVariant
     private $speed;
 
     /**
+     * @var int
+     */
+    private $basePrice;
+
+    /**
      * Create this object by static::create(stdClass $obj)
      *
      * TariffVariant constructor.
@@ -79,4 +84,59 @@ class TariffVariant
         return (int) $average;
     }
 
+    /**
+     * @return int
+     */
+    public function getPrice() : int
+    {
+        return $this->price;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPricePerMonth() : int
+    {
+        return (int)($this->price / (int)$this->payPeriod);
+    }
+
+    /**
+     * @return string
+     */
+    public function getPayPeriod() : string
+    {
+        return $this->payPeriod;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDiscount() : int
+    {
+        return (int)$this->payPeriod * $this->basePrice - $this->price;
+    }
+
+    /**
+     * @param $basePrice
+     */
+    public function setBasePrice($basePrice) : void
+    {
+        $this->basePrice = $basePrice;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBasePrice() : int
+    {
+        return $this->basePrice;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 }

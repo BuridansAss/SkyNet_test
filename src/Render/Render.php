@@ -30,7 +30,9 @@ class Render
     }
 
     /**
-     * @param $name
+     * $name: var for template
+     *
+     * @param $name string
      * @param array $args
      */
     public function rend($name, $args = []) : void

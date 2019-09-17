@@ -63,6 +63,11 @@ class Tariff
     private $freeOptions;
 
     /**
+     * @var int
+     */
+    private $basePrice;
+
+    /**
      * Create this object by static::create(stdClass $obj)
      *
      * Tariff constructor.
@@ -76,6 +81,15 @@ class Tariff
         $this->priceAdd = $object->price_add;
 
         $this->initVariants($object->tarifs);
+
+        try {
+            $this->basePrice = $this->getBasePrice();
+        } catch (Exception $e) {
+            //тут мог бы быть ваш логгер телефон: +7931.... =)))
+            echo $e->getMessage();
+        }
+
+        $this->initBasePriceForVariants();
 
         if (isset($object->free_options)) {
             $this->freeOptions = $object->free_options;
@@ -159,6 +173,14 @@ class Tariff
     }
 
     /**
+     * @return array
+     */
+    public function getVariants() : array
+    {
+        return $this->variants;
+    }
+
+    /**
      * @param stdClass $object
      * @return Tariff
      */
@@ -182,12 +204,63 @@ class Tariff
     }
 
     /**
+     * @param $id int
+     * @return TariffVariant
+     * @throws Exception
+     */
+    public function getVariantById($id) : TariffVariant
+    {
+        /**
+         * @var $variant TariffVariant
+         */
+        foreach ($this->variants as $variant)
+        {
+            if ($variant->getId() === $id)  {
+                return $variant;
+            }
+        }
+
+        throw new Exception('this variant id ' . $id . 'from another tariff');
+    }
+
+    /**
      * @param $variants
      */
     private function initVariants($variants) : void
     {
         foreach ($variants as $variant) {
             $this->variants[] = TariffVariant::create($variant);
+        }
+    }
+
+    /**
+     * @return int
+     * @throws Exception
+     */
+    private function getBasePrice() : int
+    {
+        /**
+         * @var $variant TariffVariant
+         */
+        foreach ($this->variants as $variant) {
+            if ($variant->getPayPeriod() === '1') {
+                return $variant->getPrice();
+            }
+        }
+
+        throw new Exception('Price for 1 month variant doesn\'t exist');
+    }
+
+    /**
+     * init base price for variant
+     */
+    private function initBasePriceForVariants() : void
+    {
+        /**
+         * @var $variant TariffVariant
+         */
+        foreach ($this->variants as $variant) {
+            $variant->setBasePrice($this->basePrice);
         }
     }
 }
