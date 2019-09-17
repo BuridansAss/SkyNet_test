@@ -85,6 +85,3 @@ function callAction()
         call_user_func([createController(), urlSlice()[ACTION]]);
     }
 }
-
-including(SRC);
-callAction();

@@ -4,10 +4,34 @@
 namespace App\Tariffs;
 
 
+use Exception;
 use stdClass;
 
 class Tariff
 {
+    const ID_EARTH    = 1;
+    const ID_WATER    = 2;
+    const ID_FIRE     = 3;
+    const ID_WATER_HD = 4;
+    const ID_FIRE_HD  = 5;
+
+    const EARTH_NAME    = 'Земля';
+    const WATER_NAME    = 'Вода';
+    const FIRE_NAME     = 'Огонь';
+    const WATER_HD_NAME = 'Вода HD';
+    const FIRE_HD_NAME  = 'Огонь HD';
+
+    /**
+     * @var array
+     */
+    private static $tariffsMap = [
+        self::ID_EARTH    => self::EARTH_NAME,
+        self::ID_WATER    => self::WATER_NAME,
+        self::ID_FIRE     => self::FIRE_NAME,
+        self::ID_WATER_HD => self::WATER_HD_NAME,
+        self::ID_FIRE_HD  => self::FIRE_HD_NAME
+    ];
+
     /**
      * @var string
      */
@@ -71,7 +95,7 @@ class Tariff
      */
     public function getLink() : string
     {
-        return $this->title;
+        return $this->link;
     }
 
     /**
@@ -79,7 +103,39 @@ class Tariff
      */
     public function getSpeed() : int
     {
-        return $this->title;
+        return $this->speed;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrices() : string
+    {
+        $min = null;
+        $max = null;
+
+        /**
+         * @var $variant TariffVariant
+         */
+        foreach ($this->variants as $variant) {
+            $price = $variant->getAveragePrice();
+
+            if (!isset($min) && !isset($max)) {
+                $min = $price;
+                $max = $price;
+                continue;
+            }
+
+            if ($price < $min) {
+                $min = $price;
+            }
+
+            if ($price > $max) {
+                $max = $price;
+            }
+        }
+
+        return $min . ' - ' . $max . ' ';
     }
 
     /**
@@ -87,7 +143,19 @@ class Tariff
      */
     public function getPriceAdd() : int
     {
-        return $this->title;
+        return $this->priceAdd;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFreeOptions() : array
+    {
+        if (isset($this->freeOptions)) {
+            return $this->freeOptions;
+        }
+
+        return [];
     }
 
     /**
@@ -97,6 +165,20 @@ class Tariff
     public static function create(stdClass $object) : Tariff
     {
         return new self($object);
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     * @throws Exception
+     */
+    public static function getNameById($id) : string
+    {
+        if (isset(self::$tariffsMap[$id])) {
+            return self::$tariffsMap[$id];
+        }
+
+        throw new Exception('tariff\'s id doesn\'t exist');
     }
 
     /**

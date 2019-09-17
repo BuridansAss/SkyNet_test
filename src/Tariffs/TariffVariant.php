@@ -69,4 +69,14 @@ class TariffVariant
         return new self($object);
     }
 
+    /**
+     * @return int
+     */
+    public function getAveragePrice() : int
+    {
+        $average =  $this->price / $this->payPeriod;
+
+        return (int) $average;
+    }
+
 }
