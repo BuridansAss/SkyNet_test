@@ -49,6 +49,9 @@ class Main extends BaseController
         $this->render->rend('tariffs', $bigTariff);
     }
 
+    /**
+     * @param $tariff
+     */
     public function getVariants($tariff)
     {
         try {
@@ -56,6 +59,11 @@ class Main extends BaseController
         } catch (\Exception $e) {
             header('Location: /Controller404/index');
         }
+    }
+
+    public function buy($subTariffId)
+    {
+
     }
 
     /**
