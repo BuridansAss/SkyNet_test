@@ -47,7 +47,7 @@ class Main extends BaseController
             $element['speed']       = $tariff->getSpeed();
             $element['prices']      = $tariff->getPrices();
             $element['freeOptions'] = $tariff->getFreeOptions();
-
+            $element['id']          = $tariff::getIdByName($element['title']);
             $bigTariff[] = $element;
         }
 

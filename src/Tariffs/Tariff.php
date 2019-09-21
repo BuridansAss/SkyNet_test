@@ -204,6 +204,17 @@ class Tariff
     }
 
     /**
+     * @param $name string
+     * @return int
+     */
+    public static function getIdByName($name) : int
+    {
+        $flip = array_flip(self::$tariffsMap);
+
+        return $flip[$name];
+    }
+
+    /**
      * @param $id int
      * @return TariffVariant
      * @throws Exception

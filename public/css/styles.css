@@ -1,7 +1,145 @@
-body {
-    background: #efeff4
+* {
+    margin: 0;
+    padding: 0;
+}
+.container {
+    display: flex;
+    justify-content: space-around;
+    background-color: whitesmoke;
+
+}
+.title {
+    color: #82c12b;
+    font-size: 30px;
+    padding-left: 2vw;
+    font-weight:bold;
+}
+.speed {
+    font-size: 25px;
+    padding: 1vw 1vw 1vw 2vw;
+    color: white;
+    font-weight:bold;
+}
+.prices {
+    font-size: 25px;
+    padding-left: 2vw;
+    font-weight:bold;
+    color: #4d575d;
+}
+.link {
+    font-size: 18px;
+    padding-left: 2vw;
+}
+.option {
+    font-size: 20px;
+    padding-left: 2vw;
+}
+.tariff {
+    align-self: center;
+    background-color: white;
+    margin-bottom: 20px;
+    border: 1px solid #e1e1e4;
+
+}
+.tariff div {
+    margin-top: 2vw;
+    margin-bottom: 2vw;
+}
+.variant-title {
+    align-self: center;
+    text-align: center;
+    background-color: #fff;
+    font-size: 25px;
+    font-weight: bolder;
+    width: 100vw;
+    padding-top: 1vw;
+    padding-bottom: 1vw;
+    border: 1px solid #e1e1e4;
+    margin-bottom: 2vw;
+}
+.variant {
+    align-self: center;
+    text-align: center;
+    background-color: #fff;
+    font-size: 25px;
+    font-weight: bolder;
+    width: 100vw;
+    padding-top: 1vw;
+    padding-bottom: 1vw;
+    border: 1px solid #e1e1e4;
+    margin-bottom: 20px;
+}
+.variant div {
+    margin-top: 2vw;
+    margin-bottom: 2vw;
+}
+.option div {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.hr {
+    height: 1px;
+    background: #cac9ce;
+    margin-left: 2vw;
+}
+.tariff:nth-child(2n+2) .speed {
+    background: #0075d9;
+}
+.tariff:nth-child(1) .speed {
+    background: #70603e;
+}
+.tariff:nth-child(2n+3) .speed {
+    background: #e74807;
+}
+a {
+    text-decoration: none;
+    color: #007aff;
 }
 
-.main-tariffs {
-    background: #fff
+@media screen and (max-width: 639px){
+    .container {
+        flex-direction: column;
+        flex-wrap: wrap;
+        max-width: 639px;
+        flex: 1;
+    }
+    .tariff {
+        flex-basis: 90%;
+        width: 639px;
+    }
+    .variant {
+        flex-basis: 90%;
+        width: 639px;
+    }
+    .variant-title {
+        flex-basis: 90%;
+        width: 639px;
+    }
+}
+@media screen and (min-width: 640px) and (max-width: 1023px) {
+    .container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        min-width: 640px;
+        max-width: 1023px;
+    }
+    .tariff {
+        flex-basis: 45%;
+    }
+    .hr {
+
+    }
+}
+@media screen and (min-width: 1024px) {
+    .container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        min-width: 1024px;
+    }
+    .tariff {
+        flex-basis: 30%;
+    }
+    .hr {
+
+    }
 }

@@ -1,6 +1,18 @@
 window.onload = function() {
     console.log('window loaded');
 
+    let variants = document.getElementsByClassName('getVariant');
+
+
+    for (let variant of variants) {
+        variant.onclick = function () {
+            let id = variant.getAttribute('id');
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', 'main/getVariants/tariffId=' + id, false);
+            xhr.send();
+        };
+    }
+
     let getWindowWidth = function() {
         return  window.innerWidth;
     };

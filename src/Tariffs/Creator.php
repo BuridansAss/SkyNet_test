@@ -18,7 +18,7 @@ class Creator
         $result = [];
 
         foreach ($jsonObject->tarifs as $tariff) {
-           $result[] = Tariff::create($tariff);
+            $result[] = Tariff::create($tariff);
         }
 
         return $result;

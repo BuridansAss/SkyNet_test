@@ -1,30 +1,20 @@
-<?php for($i = 0 ; $i < count($tariffs); $i++): ?>
-    <div class="main-tariffs <?= $i ?>">
-        <p>
-            <?=$tariffs[$i]['title']?>
-        </p>
-        <p>
-            <?=$tariffs[$i]['speed']?> мбит/с
-        </p>
-        <p>
-            <?=$tariffs[$i]['prices'] . htmlspecialchars_decode('&#8381')?> /мес
-        </p>
+<?php foreach ($tariffs as $tariff): ?>
+    <div class="tariff">
+        <div class="title"> Тариф "<?=$tariff['title'] ?>"</div>
+        <div class="hr"></div>
+        <div class="getVariant" id="<?= $tariff['id']?>">
+            <span class="speed"> <?=$tariff['speed'] ?> Мбит/с</span>
+            <div class="prices"> <?=$tariff['prices'] . htmlspecialchars_decode('&#8381') ?> /мес</div>
 
-        <p>
-            <?php if (!empty($tariffs[$i]['freeOptions'])): ?>
-                <?php for ($j = 0; $j < count($tariffs[$i]['freeOptions']); $j++):?>
-                    <p>
-                        <?=$tariffs[$i]['freeOptions'][$j]?>
-                    </p>
-                <?php endfor;?>
+            <?php if (isset($tariff['freeOptions'])):?>
+                <div class="option">
+                    <?php foreach ($tariff['freeOptions'] as $option): ?>
+                        <div><?=$option ?></div>
+                    <?php endforeach;?>
+                </div>
             <?php endif;?>
-        </p>
-
-        <p>
-            <a href="<?=$tariffs[$i]['link']?>"> узнать подробнее на сайте <?=$tariffs[$i]['link']?></a>
-        </p>
+        </div>
+        <div class="hr"></div>
+        <div class="link"> <a href="<?=$tariff['link'] ?>" target="_blank">узнать подробнее на сайте www.sknt.ru</a></div>
     </div>
-
-<?php endfor;?>
-
-
+<?php endforeach;?>

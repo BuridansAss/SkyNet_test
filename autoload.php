@@ -1,10 +1,10 @@
 <?php
-
 define('CONTROLLER', 'controller');
 define('ACTION', 'action');
 define('PARAMS', 'params');
 define('SRC', __DIR__ . '/src');
-
+define('CSS', 'http://' . $_SERVER['HTTP_HOST'] . '/public/css/styles.css');
+define('JS', 'http://' . $_SERVER['HTTP_HOST'] . '/public/js/app.js');
 /**
  * @return array
  */
@@ -12,6 +12,11 @@ function urlSlice()
 {
     $split = [];
     $uri = explode("/", $_SERVER['REQUEST_URI']);
+
+    if (end($uri) === 'app.js') {
+        reset($uri);
+
+    }
 
     (isset($uri[1]) && $uri[1] !== '') ? $split[CONTROLLER] = $uri[1] : $split[CONTROLLER] = 'Main';
     (isset($uri[2]) && $uri[2] !== '') ? $split[ACTION] = $uri[2] : $split[ACTION] = 'index';
