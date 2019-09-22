@@ -1,12 +1,13 @@
 <?php
+error_reporting(0);
 
 include './autoload.php';
 including(SRC);
 
-$uri = urlSlice();
+global $split;
 
-App\Render\Render::setController($uri[CONTROLLER]);
-App\Render\Render::setAction($uri[ACTION]);
+App\Render\Render::setController($split[CONTROLLER]);
+App\Render\Render::setAction($split[ACTION]);
 
 
 callAction();

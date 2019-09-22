@@ -2,7 +2,7 @@
     <div class="tariff">
         <div class="title"> Тариф "<?=$tariff['title'] ?>"</div>
         <div class="hr"></div>
-        <div class="getVariant" id="<?= $tariff['id']?>">
+        <div class="getVariant" id="<?= $tariff['id']?>" pref="<?=PREFIX?>">
             <span class="speed"> <?=$tariff['speed'] ?> Мбит/с</span>
             <div class="prices"> <?=$tariff['prices'] . ' ' . htmlspecialchars_decode('&#8381') ?> /мес</div>
 

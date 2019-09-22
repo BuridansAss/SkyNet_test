@@ -3,19 +3,6 @@ define('CONTROLLER', 'controller');
 define('ACTION', 'action');
 define('PARAMS', 'params');
 define('SRC', __DIR__ . '/src');
-//define('CSS', 'http://' . $_SERVER['HTTP_HOST'] . '/public/css/styles.css');
-//define('JS', 'http://' . $_SERVER['HTTP_HOST'] . '/public/js/app.js');
-
-function whereAmI() {
-    $whereAmI = explode(DIRECTORY_SEPARATOR, __DIR__);
-    $result = '';
-
-    foreach ($whereAmI as $key => $value) {
-        $result .= $value . '/';
-    }
-
-    return $result;
-}
 
 /**
  * @return array
@@ -29,33 +16,40 @@ function urlSlice()
     //узнаю название совей дирректории
     $myFolder = $whereAmI[count($whereAmI) - 1];
 
-    $count = count($uri) - 1;
     $path = '';
+    $i = 0;
+    $flag = false;
 
-    if ($count > 3) {
-        foreach ($uri as $key => $value) {
-            if ($value != $myFolder) {
-                $path .= $value . '/';
-                unset($uri[$key]);
-                continue;
-            }
+    foreach ($uri as $key => $value) {
+        if ($value != $myFolder) {
             $path .= $value . '/';
-
-            break;
+            $i++;
+            $flag = true;
+            continue;
         }
+        $path .= $value . '/';
+        $i++;
+        $flag = false;
+        break;
+    }
+
+    if ($flag === false) {
         define('CSS', 'http://' . $_SERVER['HTTP_HOST'] . $path . 'public/css/styles.css');
-        define('JS', 'http://' . $_SERVER['HTTP_HOST'] . $path .'/public/js/app.js');
+        define('JS', 'http://' . $_SERVER['HTTP_HOST'] . $path .'public/js/app.js');
+        define('PREFIX', $path);
+
+        (isset($uri[$i]) && $uri[$i] !== '') ? $split[CONTROLLER] = $uri[$i] : $split[CONTROLLER] = 'Main';
+        (isset($uri[++$i]) && $uri[$i] !== '') ? $split[ACTION] = $uri[$i] : $split[ACTION] = 'index';
+        (isset($uri[++$i]) && $uri[$i] !== '') ? $split[PARAMS] = $uri[$i] : null;
     } else {
         define('CSS', 'http://' . $_SERVER['HTTP_HOST'] . '/public/css/styles.css');
         define('JS', 'http://' . $_SERVER['HTTP_HOST'] . '/public/js/app.js');
+        define('PREFIX', '/');
+
+        (isset($uri[1]) && $uri[1] !== '') ? $split[CONTROLLER] = $uri[1] : $split[CONTROLLER] = 'Main';
+        (isset($uri[2]) && $uri[2] !== '') ? $split[ACTION] = $uri[2] : $split[ACTION] = 'index';
+        (isset($uri[3]) && $uri[3] !== '') ? $split[PARAMS] = $uri[3] : null;
     }
-
-
-    $uri = array_values($uri);
-
-    (isset($uri[1]) && $uri[1] !== '') ? $split[CONTROLLER] = $uri[1] : $split[CONTROLLER] = 'Main';
-    (isset($uri[2]) && $uri[2] !== '') ? $split[ACTION] = $uri[2] : $split[ACTION] = 'index';
-    (isset($uri[3]) && $uri[3] !== '') ? $split[PARAMS] = $uri[3] : null;
 
     if (isset($split[PARAMS])) {
         parse_str($split[PARAMS], $split[PARAMS]);
@@ -66,6 +60,8 @@ function urlSlice()
     return $split;
 }
 
+$split = urlSlice();
+
 /**
  * @return object
  *
@@ -73,7 +69,9 @@ function urlSlice()
  */
 function createController()
 {
-    $name = ucfirst(urlSlice()[CONTROLLER]);
+    global $split;
+
+    $name = ucfirst($split[CONTROLLER]);
 
     $controller = '\\App\\Controllers\\' . $name;
     $controller404 = '\\App\\Controllers\\Controller404';
@@ -84,7 +82,7 @@ function createController()
         return $object;
     } else {
         $object = new $controller404();
-        call_user_func([$object, 'index'], urlSlice()[PARAMS]);
+        call_user_func([$object, 'index'], $split[PARAMS]);
         die();
     }
 }
@@ -117,11 +115,12 @@ function including($dir)
 
 function callAction()
 {
-    $slice = urlSlice();
+    global $split;
+    $slice = $split;
 
     if (isset($slice[PARAMS])) {
-        call_user_func([createController(), urlSlice()[ACTION]], urlSlice()[PARAMS]);
+        call_user_func([createController(), $split[ACTION]], $split[PARAMS]);
     } else {
-        call_user_func([createController(), urlSlice()[ACTION]]);
+        call_user_func([createController(), $split[ACTION]]);
     }
 }

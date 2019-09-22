@@ -9,8 +9,9 @@ window.onload = function() {
     for (let variant of variants) {
         variant.onclick = function () {
             let id = variant.getAttribute('id');
+            let pref = variant.getAttribute('pref');
             let xhr = new XMLHttpRequest();
-            xhr.open('GET', '/main/getVariants/tariffId=' + id, false);
+            xhr.open('GET',pref + 'main/getVariants/tariffId=' + id, false);
             xhr.send();
 
             let doc = document.open("text/html", "replace");
@@ -23,8 +24,9 @@ window.onload = function() {
         choice.onclick = function () {
             let id = choice.getAttribute('id');
             let tariffId = choice.getAttribute('tariff');
+            let pref = choice.getAttribute('pref');
             let xhr = new XMLHttpRequest();
-            xhr.open('GET', '/main/choice/tariffId=' + tariffId + '&variantId=' + id, false);
+            xhr.open('GET', pref + 'main/choice/tariffId=' + tariffId + '&variantId=' + id, false);
             xhr.send();
 
             let doc = document.open("text/html", "replace");
