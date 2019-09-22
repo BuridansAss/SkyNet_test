@@ -1,7 +1,6 @@
 <?php
 
 include './autoload.php';
-
 including(SRC);
 
 $uri = urlSlice();

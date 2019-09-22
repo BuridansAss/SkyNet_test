@@ -3,8 +3,20 @@ define('CONTROLLER', 'controller');
 define('ACTION', 'action');
 define('PARAMS', 'params');
 define('SRC', __DIR__ . '/src');
-define('CSS', 'http://' . $_SERVER['HTTP_HOST'] . '/public/css/styles.css');
-define('JS', 'http://' . $_SERVER['HTTP_HOST'] . '/public/js/app.js');
+//define('CSS', 'http://' . $_SERVER['HTTP_HOST'] . '/public/css/styles.css');
+//define('JS', 'http://' . $_SERVER['HTTP_HOST'] . '/public/js/app.js');
+
+function whereAmI() {
+    $whereAmI = explode(DIRECTORY_SEPARATOR, __DIR__);
+    $result = '';
+
+    foreach ($whereAmI as $key => $value) {
+        $result .= $value . '/';
+    }
+
+    return $result;
+}
+
 /**
  * @return array
  */
@@ -13,10 +25,33 @@ function urlSlice()
     $split = [];
     $uri = explode("/", $_SERVER['REQUEST_URI']);
 
-    if (end($uri) === 'app.js') {
-        reset($uri);
+    $whereAmI = explode(DIRECTORY_SEPARATOR, __DIR__);
+    //узнаю название совей дирректории
+    $myFolder = $whereAmI[count($whereAmI) - 1];
 
+    $count = count($uri) - 1;
+    $path = '';
+
+    if ($count > 3) {
+        foreach ($uri as $key => $value) {
+            if ($value != $myFolder) {
+                $path .= $value . '/';
+                unset($uri[$key]);
+                continue;
+            }
+            $path .= $value . '/';
+
+            break;
+        }
+        define('CSS', 'http://' . $_SERVER['HTTP_HOST'] . $path . 'public/css/styles.css');
+        define('JS', 'http://' . $_SERVER['HTTP_HOST'] . $path .'/public/js/app.js');
+    } else {
+        define('CSS', 'http://' . $_SERVER['HTTP_HOST'] . '/public/css/styles.css');
+        define('JS', 'http://' . $_SERVER['HTTP_HOST'] . '/public/js/app.js');
     }
+
+
+    $uri = array_values($uri);
 
     (isset($uri[1]) && $uri[1] !== '') ? $split[CONTROLLER] = $uri[1] : $split[CONTROLLER] = 'Main';
     (isset($uri[2]) && $uri[2] !== '') ? $split[ACTION] = $uri[2] : $split[ACTION] = 'index';

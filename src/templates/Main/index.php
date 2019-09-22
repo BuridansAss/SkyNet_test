@@ -4,7 +4,7 @@
         <div class="hr"></div>
         <div class="getVariant" id="<?= $tariff['id']?>">
             <span class="speed"> <?=$tariff['speed'] ?> Мбит/с</span>
-            <div class="prices"> <?=$tariff['prices'] . htmlspecialchars_decode('&#8381') ?> /мес</div>
+            <div class="prices"> <?=$tariff['prices'] . ' ' . htmlspecialchars_decode('&#8381') ?> /мес</div>
 
             <?php if (isset($tariff['freeOptions'])):?>
                 <div class="option">

@@ -5,17 +5,13 @@ namespace App\Controllers;
 
 
 use App\Json\Parser;
-use App\Render\Render;
 use App\Tariffs\Creator;
-use App\Tariffs\Sort;
 use App\Tariffs\Tariff;
 use App\Tariffs\TariffVariant;
 use Exception;
 
 class Main extends BaseController
 {
-    private $tariffs;
-
     private $parser;
 
     /**
@@ -79,10 +75,12 @@ class Main extends BaseController
                 $element = [];
 
                 $element['month']         = $variant->getPayPeriod();
+                $element['declension']    = $variant->getMonthDeclension();
                 $element['pricePerMonth'] = $variant->getPricePerMonth();
                 $element['price']         = $variant->getPrice();
                 $element['discount']      = $variant->getDiscount();
                 $element['id']            = $variant->getId();
+                $element['tariffId']      = Tariff::getIdByName($title);
 
                 $serializeVariants[] = $element;
             }
@@ -117,8 +115,12 @@ class Main extends BaseController
             $this->render->rend(
                 'variant',
                 [
-                    'variant' => $variant,
-                    'title'   => $title
+                    'payPeriod'     => $variant->getPayPeriod(),
+                    'declension'    => $variant->getMonthDeclension(),
+                    'pricePerMonth' => $variant->getPricePerMonth(),
+                    'price'         => $variant->getPrice(),
+                    'activeBy'      => $variant->getNewPayDay(),
+                    'title'         => $title
                 ]
             );
 

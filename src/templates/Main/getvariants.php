@@ -2,9 +2,14 @@
 
 <?php foreach ($variants['variants'] as $variant):?>
     <div class="variant">
-        <div class="period"><?=$variant['month']?></div>
+        <div class="period"><?=$variant['month'] . ' ' . $variant['declension']?></div>
         <div class="hr"></div>
-        <div class="pricePerMonth"><?=$variant['pricePerMonth']?></div>
-        <div class="priceAll"><?=$variant['price']?></div>
+        <div class="choice" id="<?=$variant['id']?>" tariff="<?=$variant['tariffId']?>">
+            <div class="pricePerMonth"><?=$variant['pricePerMonth'] . ' ' . htmlspecialchars_decode('&#8381')?>/мес </div>
+            <div class="priceAll">разовый платеж - <?=$variant['price'] . ' ' . htmlspecialchars_decode('&#8381')?></div>
+            <?php if ($variant['discount'] !== 0):?>
+                <div class="discount">скидка - <?=$variant['discount']?></div>
+            <?php endif;?>
+        </div>
     </div>
 <?php endforeach;?>

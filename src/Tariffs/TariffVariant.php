@@ -135,8 +135,42 @@ class TariffVariant
     /**
      * @return int
      */
-    public function getId()
+    public function getId() : int
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMonthDeclension() : string
+    {
+        switch ($this->payPeriod) {
+            case '1':
+                return 'месяц';
+            case '3':
+                return 'месяца';
+            case '6':
+                return 'месяцев';
+            default :
+                return 'месяцев';
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getNewPayDay() : string
+    {
+        $dateAndOffset = explode('+', $this->newPayDay);
+        $dateAndOffset = $dateAndOffset[0] + $dateAndOffset[1];
+
+        $dateArray = getdate($dateAndOffset);
+
+        if ($dateArray['mon'] < 10) {
+            $dateArray['mon'] = '0' . $dateArray['mon'];
+        }
+
+        return $dateArray['mday'] . '.' . $dateArray['mon'] . '.' . $dateArray['year'];
     }
 }
