@@ -66,6 +66,7 @@ class Main extends BaseController
             }
 
             $tariff = Creator::getTariffById($this->parser->jsonToObjects(), $tariff['tariffId']);
+
             $title = $tariff->getTitle();
 
             /**

@@ -7,37 +7,45 @@ window.onload = function() {
 
 
     for (let variant of variants) {
-        variant.onclick = function () {
+        variant.onclick = async function () {
             let id = variant.getAttribute('id');
             let pref = variant.getAttribute('pref');
-            let xhr = new XMLHttpRequest();
-            xhr.open('GET',pref + 'main/getVariants/tariffId=' + id, false);
-            xhr.send();
+
+            const response = await fetch(pref + 'main/getVariants/tariffId=' + id, {
+                method: 'GET'
+            });
+
+            const body = await response.text();
 
             let doc = document.open("text/html", "replace");
-            doc.write(xhr.responseText);
+            doc.write(body);
             doc.close();
         };
     }
 
     for (let choice of choices) {
-        choice.onclick = function () {
+        choice.onclick = async function () {
             let id = choice.getAttribute('id');
             let tariffId = choice.getAttribute('tariff');
             let pref = choice.getAttribute('pref');
-            let xhr = new XMLHttpRequest();
-            xhr.open('GET', pref + 'main/choice/tariffId=' + tariffId + '&variantId=' + id, false);
-            xhr.send();
+
+            const response = await fetch(pref + 'main/choice/tariffId=' + tariffId + '&variantId=' + id, {
+                method: 'GET'
+            });
+
+            const body = await response.text();
 
             let doc = document.open("text/html", "replace");
-            doc.write(xhr.responseText);
+            doc.write(body);
             doc.close();
         };
     }
 
-    buyButton.onclick = function () {
-        alert('Поздравляю с покупкой, Абонент =)')
-    };
+    if (buyButton !== null) {
+        buyButton.onclick = function () {
+            alert('Поздравляю с покупкой, Абонент =)')
+        }
+    }
 
     let getWindowWidth = function() {
         return  window.innerWidth;

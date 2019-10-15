@@ -49,7 +49,7 @@ class Render
      */
     public static function setController($controller) : void
     {
-        self::$controller = $controller;
+        self::$controller = ucfirst($controller);
     }
 
     /**
