@@ -4,6 +4,12 @@ define('ACTION', 'action');
 define('PARAMS', 'params');
 define('SRC', __DIR__ . '/src');
 
+if ($_SERVER['HTTPS'] !='') {
+    define ('PROTOCOL', 'https://');
+} else {
+    define ('PROTOCOL', 'http://');
+}
+
 /**
  * @return array
  */
@@ -13,42 +19,68 @@ function urlSlice()
     $uri = explode("/", $_SERVER['REQUEST_URI']);
 
     $whereAmI = explode(DIRECTORY_SEPARATOR, __DIR__);
+
+
     //узнаю название совей дирректории
     $myFolder = $whereAmI[count($whereAmI) - 1];
 
-    $path = '';
-    $i = 0;
-    $flag = false;
 
-    foreach ($uri as $key => $value) {
-        if ($value != $myFolder) {
+    $flag = true;
+    $path = '/';
+    $i = 0;
+
+    if (strpos($_SERVER['REQUEST_URI'], $myFolder) == 0) {
+        $uri = explode("/", $_SERVER['REQUEST_URI']);
+        $i = 1;
+    } else {
+        foreach ($uri as $key => $value) {
+            if ($value == '') {
+                $i++;
+                continue;
+            }
+
+            if ($value != $myFolder) {
+                $path .= $value . '/';
+                $i++;
+                $flag = true;
+                continue;
+            }
             $path .= $value . '/';
             $i++;
-            $flag = true;
-            continue;
+            $flag = false;
+            break;
         }
-        $path .= $value . '/';
-        $i++;
-        $flag = false;
-        break;
+
     }
 
+    //костыльный костыль для добавления в занка вопроса а зачем? => читай ниже
+    if ($_SERVER['REQUEST_URI'] == $path || $path == '//') {
+        $_SERVER['REQUEST_URI'] = '/?';
+        $uri = explode("/", $_SERVER['REQUEST_URI']);
+        $i = 1;
+    }
+
+
+    //убираем знак вопроса чтоб корректно понять какйо контроллер
+    // а добавил знак вопроса чтоб сервер не считал "/" за разделитель дирректорий а считал запрос как параметр
+    $uri[$i] = substr($uri[$i], 1);
+
     if ($flag === false) {
-        define('CSS', 'http://' . $_SERVER['HTTP_HOST'] . $path . 'public/css/styles.css');
-        define('JS', 'http://' . $_SERVER['HTTP_HOST'] . $path .'public/js/app.js');
+        define('CSS', PROTOCOL . $_SERVER['HTTP_HOST'] . $path . 'public/css/styles.css');
+        define('JS',  PROTOCOL . $_SERVER['HTTP_HOST'] . $path .'public/js/app.js');
         define('PREFIX', $path);
 
         (isset($uri[$i]) && $uri[$i] !== '') ? $split[CONTROLLER] = $uri[$i] : $split[CONTROLLER] = 'Main';
-        (isset($uri[++$i]) && $uri[$i] !== '') ? $split[ACTION] = $uri[$i] : $split[ACTION] = 'index';
-        (isset($uri[++$i]) && $uri[$i] !== '') ? $split[PARAMS] = $uri[$i] : null;
+        (isset($uri[++$i]) && $uri[$i] !== '') ? $split[ACTION]   = $uri[$i] : $split[ACTION] = 'index';
+        (isset($uri[++$i]) && $uri[$i] !== '') ? $split[PARAMS]   = $uri[$i] : null;
     } else {
-        define('CSS', 'http://' . $_SERVER['HTTP_HOST'] . '/public/css/styles.css');
-        define('JS', 'http://' . $_SERVER['HTTP_HOST'] . '/public/js/app.js');
+        define('CSS', PROTOCOL . $_SERVER['HTTP_HOST'] . '/public/css/styles.css');
+        define('JS',  PROTOCOL . $_SERVER['HTTP_HOST'] . '/public/js/app.js');
         define('PREFIX', '/');
 
-        (isset($uri[1]) && $uri[1] !== '') ? $split[CONTROLLER] = $uri[1] : $split[CONTROLLER] = 'Main';
-        (isset($uri[2]) && $uri[2] !== '') ? $split[ACTION] = $uri[2] : $split[ACTION] = 'index';
-        (isset($uri[3]) && $uri[3] !== '') ? $split[PARAMS] = $uri[3] : null;
+        (isset($uri[$i])   && $uri[$i]  !== '') ? $split[CONTROLLER] = $uri[$i] : $split[CONTROLLER] = 'Main';
+        (isset($uri[++$i]) && $uri[$i] !== '') ? $split[ACTION]    = $uri[$i] : $split[ACTION] = 'index';
+        (isset($uri[++$i]) && $uri[$i] !== '') ? $split[PARAMS]    = $uri[$i] : null;
     }
 
     if (isset($split[PARAMS])) {

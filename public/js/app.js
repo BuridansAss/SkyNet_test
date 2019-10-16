@@ -11,7 +11,7 @@ window.onload = function() {
             let id = variant.getAttribute('id');
             let pref = variant.getAttribute('pref');
 
-            const response = await fetch(pref + 'main/getVariants/tariffId=' + id, {
+            const response = await fetch(pref + '?main/getVariants/tariffId=' + id, {
                 method: 'GET'
             });
 
@@ -29,7 +29,7 @@ window.onload = function() {
             let tariffId = choice.getAttribute('tariff');
             let pref = choice.getAttribute('pref');
 
-            const response = await fetch(pref + 'main/choice/tariffId=' + tariffId + '&variantId=' + id, {
+            const response = await fetch(pref + '?main/choice/tariffId=' + tariffId + '&variantId=' + id, {
                 method: 'GET'
             });
 
